@@ -13,6 +13,7 @@ defmodule ElixirInterviewStarter.Core do
   alias __MODULE__.Type.CalibrationSession
 
   @spec calibration_start((String.t() -> :ok)) :: {:ok, CalibrationSession.t()}
+
   @doc """
   Starts new Session
 
@@ -25,7 +26,7 @@ defmodule ElixirInterviewStarter.Core do
   defdelegate calibration_start(send_command_fn), to: Calibration, as: :start
 
   @spec calibration_start(nil | CalibrationSession.t(), (String.t() -> :ok)) ::
-          {:ok, CalibrationSession.t()}
+          {:ok, CalibrationSession.t()} | {:error, :calibrating}
   @doc """
   Starts new Session when current session is nil
   or else returns error
