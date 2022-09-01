@@ -1,4 +1,6 @@
 defmodule ElixirInterviewStarterTest do
+  @moduledoc false
+  
   use ExUnit.Case
   doctest ElixirInterviewStarter
 
