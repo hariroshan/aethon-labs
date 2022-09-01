@@ -41,7 +41,7 @@ purposes of this challenge, we'll assume we've already implemented the message s
 receiving. To send the "calibrate" command to Kelli's device, for example, you can use
 `device_messages.ex`:
 
-```
+```elixir
 DeviceMessages.send("kelli@email.com", "calibrate")
 ```
 
@@ -185,6 +185,3 @@ we also aim to be fully transparent about how we will score your submission:
 | 8 | Explains their implementation choices and walks through their submission clearly and confidently
 | 2 | Reflects on any missteps or areas for improvement and is receptive to feedback shared
 | 10 | Verbally articulates an Elixir concept of their choice in a way that would be easy to grasp for a junior engineer with limited exposure to Elixir
-
-
-

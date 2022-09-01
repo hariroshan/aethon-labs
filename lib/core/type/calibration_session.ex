@@ -18,7 +18,7 @@ defmodule ElixirInterviewStarter.Core.Type.CalibrationSession do
         }
 
   # one minute
-  @timeout 1000 * 60
+  @timeout 1000 * 30
 
   defstruct ~w(
     state
