@@ -3,7 +3,7 @@ defmodule ElixirInterviewStarter do
   See `README.md` for instructions on how to approach this technical challenge.
   """
 
-  alias ElixirInterviewStarter.CalibrationSession
+  alias ElixirInterviewStarter.Core.Type.CalibrationSession
 
   @spec start(user_email :: String.t()) :: {:ok, CalibrationSession.t()} | {:error, String.t()}
   @doc """
