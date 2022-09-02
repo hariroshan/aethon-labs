@@ -2,7 +2,9 @@
 
 ## Using this Starter
 
-This starter was created using erlang 22.3.4.12 and Elixir 1.11.3 but should be compatible
+suggested Elixir version 1.13.4-otp-25
+
+This starter was created using erlang 22.3.4.12 and Elixir 1.13.4-otp-25 but should be compatible
 with other versions as well. This project supports managing your erlang and Elixir
 installations with [asdf](https://github.com/asdf-vm/asdf) (with the
 [asdf-erlang](https://github.com/asdf-vm/asdf-erlang) and
