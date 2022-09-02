@@ -14,7 +14,8 @@ defmodule ElixirInterviewStarter.Boundary.CalibrationServer do
 
   @type state :: %{
           email: String.t(),
-          session: nil | CalibrationSession.t()
+          session: nil | CalibrationSession.t(),
+          timer: reference()
         }
 
   @registry_name Registry.Calibration
@@ -64,7 +65,7 @@ defmodule ElixirInterviewStarter.Boundary.CalibrationServer do
 
   @spec lookup(String.t()) :: nil | pid()
   def lookup(email) do
-    Registry.lookup(@registry_name, via(email))
+    Registry.lookup(@registry_name, email)
     |> case do
       [{pid, _}] -> pid
       _ -> nil
@@ -83,14 +84,14 @@ defmodule ElixirInterviewStarter.Boundary.CalibrationServer do
   # OTP CALLBACKS
 
   @impl GenServer
-  @spec init(String.t()) :: {:ok, state(), pos_integer()}
+  @spec init(String.t()) :: {:ok, state()}
   def init(email) do
     {:ok, session} =
       email
       |> send_command
       |> Core.calibration_start()
 
-    {:ok, %{email: email, session: session}, session.timeout}
+    {:ok, %{email: email, session: session, timer: refresh_timer(nil, session.timeout)}}
   end
 
   @impl GenServer
@@ -116,13 +117,19 @@ defmodule ElixirInterviewStarter.Boundary.CalibrationServer do
     {:reply, state.session, state}
   end
 
+  @impl GenServer
+  def handle_info(:timeout, state) do
+    {:stop, :normal, state}
+  end
+
   defp map_to_reply_if_valid_or_stop_session(result, state) do
     case result do
       {:ok, session} ->
-        {:reply, :ok, %{state | session: session}, session.timeout}
+        {:reply, :ok,
+         %{state | session: session, timer: refresh_timer(state.timer, session.timeout)}}
 
       {:error, _} = err ->
-        {:stop, err, err, state}
+        {:stop, :normal, err, state}
     end
   end
 
@@ -132,5 +139,14 @@ defmodule ElixirInterviewStarter.Boundary.CalibrationServer do
 
   defp via(email) do
     {:via, Registry, {@registry_name, email}}
+  end
+
+  # Refresh timer for every message received.
+  defp refresh_timer(timer, timeout) do
+    if not is_nil(timer) do
+      Process.cancel_timer(timer)
+    end
+
+    Process.send_after(self(), :timeout, timeout)
   end
 end

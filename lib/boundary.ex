@@ -20,12 +20,12 @@ defmodule ElixirInterviewStarter.Boundary do
   """
   defdelegate calibrate_start(email), to: Calibration, as: :start
 
-  @spec calibrate_handle_msg(String.t(), map()) :: :ok | {:error, :invalid_state_transition}
+  @spec calibrate_device_msg(String.t(), map()) :: :ok | {:error, :invalid_state_transition}
   @doc """
   Messages from the device is routed to the session if it exists
   or else it returns error
   """
-  defdelegate calibrate_handle_msg(email, parameter), to: Calibration, as: :handle_msg
+  defdelegate calibrate_device_msg(email, parameter), to: Calibration, as: :device_msg
 
   @spec calibrate_start_precheck_2(String.t()) :: :ok | {:error, :invalid_state_transition}
   @doc """

@@ -26,14 +26,22 @@ defmodule ElixirInterviewStarter do
   an error.
   """
   def start_precheck_2(user_email) do
-    Boundary.calibrate_start(user_email)
+    Boundary.calibrate_start_precheck_2(user_email)
   end
 
-  @spec get_current_session(user_email :: String.t()) :: {:ok, CalibrationSession.t() | nil}
+  @spec get_current_session(user_email :: String.t()) :: CalibrationSession.t() | nil
   @doc """
   Retrieves the ongoing `CalibrationSession` for the provided user, if they have one
   """
   def get_current_session(user_email) do
-    {:ok, Boundary.calibrate_current_session(user_email)}
+    Boundary.calibrate_current_session(user_email)
+  end
+
+  @spec device_msg(String.t(), map()) :: :ok | {:error, :invalid_state_transition}
+  @doc """
+  Messages from the Devices can be sent to this function.
+  """
+  def device_msg(user_email, parameter) do
+    Boundary.calibrate_device_msg(user_email, parameter)
   end
 end

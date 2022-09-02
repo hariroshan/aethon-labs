@@ -19,18 +19,18 @@ defmodule ElixirInterviewStarter.Boundary.Calibration do
         :ok
 
       pid ->
-        # This will return {:error, :invalid_state_transition}
+        # This will return {:error, :calibrating}
         # Since the session already started
         CalibrationServer.start(pid)
     end
   end
 
-  @spec handle_msg(String.t(), map()) :: :ok | {:error, :invalid_state_transition}
+  @spec device_msg(String.t(), map()) :: :ok | {:error, :invalid_state_transition}
   @doc """
   Messages from the device is routed to the session if it exists
   or else it returns error
   """
-  def handle_msg(email, parameter) when is_binary(email) and is_map(parameter) do
+  def device_msg(email, parameter) when is_binary(email) and is_map(parameter) do
     email
     |> apply_function_only_when_session_exists(fn pid ->
       CalibrationServer.device_msg(pid, parameter)
@@ -58,9 +58,9 @@ defmodule ElixirInterviewStarter.Boundary.Calibration do
 
   defp apply_function_only_when_session_exists(email, fx) do
     CalibrationServer.lookup(email)
-    # Session probably Timeout when lookup returns nil
-    |> Maybe.map_nil(fn -> {:error, :invalid_state_transition} end)
     # This code is executed only when lookup returns pid value which is session process
     |> Maybe.map(fx)
+    # Session probably Timeout when lookup returns nil
+    |> Maybe.map_nil(fn -> {:error, :invalid_state_transition} end)
   end
 end
